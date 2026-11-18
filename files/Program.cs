@@ -2,12 +2,11 @@ using Microsoft.Data.Sqlite;
 
 const string cadenaConexion = "Data Source=videojuegos.db";
 
-// using garantiza que la conexión se cierre y libere al terminar
+
 using var conexion = new SqliteConnection(cadenaConexion);
 conexion.Open();
 Console.WriteLine("Conexión establecida con la base de datos SQLite.\n");
 
-// 1. Crear la tabla (4 columnas)
 using (var crear = conexion.CreateCommand())
 {
     crear.CommandText = @"
@@ -20,14 +19,13 @@ using (var crear = conexion.CreateCommand())
     crear.ExecuteNonQuery();
 }
 
-// Limpiar para que la demo no duplique registros al ejecutarla varias veces
+
 using (var limpiar = conexion.CreateCommand())
 {
     limpiar.CommandText = "DELETE FROM Videojuegos;";
     limpiar.ExecuteNonQuery();
 }
 
-// 2. Insertar registros usando parámetros
 var juegos = new (string Titulo, string Genero, int Anio)[]
 {
     ("The Legend of Zelda: Breath of the Wild", "Aventura", 2017),
@@ -47,7 +45,7 @@ foreach (var juego in juegos)
     Console.WriteLine($"Insertado: {juego.Titulo}");
 }
 
-// 3. Consultar y mostrar con DataReader
+
 Console.WriteLine("\n--- Videojuegos almacenados ---");
 using var consulta = conexion.CreateCommand();
 consulta.CommandText = "SELECT Id, Titulo, Genero, Anio FROM Videojuegos;";
